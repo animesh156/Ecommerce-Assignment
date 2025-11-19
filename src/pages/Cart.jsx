@@ -40,19 +40,18 @@ export default function Cart() {
             key={product.id}
             className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition border border-gray-100"
           >
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               {/* IMAGE */}
               <img
                 src={product.image}
-                className="w-24 h-24 object-contain bg-gray-50 rounded-lg p-2"
+                className="w-24 h-24 object-contain bg-gray-50 rounded-lg p-2 mx-auto sm:mx-0"
               />
 
-              {/* PRODUCT DETAILS */}
+              {/* DETAILS + SELECTOR */}
               <div className="flex-1">
                 <h3 className="font-semibold text-lg">{product.title}</h3>
                 <p className="text-gray-600">${product.price}</p>
 
-                {/* Quantity Selector */}
                 <div className="mt-3 flex items-center gap-3">
                   <label className="text-sm text-gray-600">Qty:</label>
 
@@ -70,7 +69,6 @@ export default function Cart() {
                     ))}
                   </select>
 
-                  {/* REMOVE BUTTON */}
                   <button
                     onClick={() => handleRemove(product.id)}
                     className="flex items-center gap-1 text-red-600 cursor-pointer hover:text-red-800 ml-4 transition"
@@ -82,7 +80,7 @@ export default function Cart() {
               </div>
 
               {/* SUBTOTAL */}
-              <div className="font-bold text-lg text-right min-w-[80px]">
+              <div className="font-bold text-lg sm:text-right text-left sm:w-20 w-full sm:shrink-0">
                 ${formatPrice(product.price * qty)}
               </div>
             </div>

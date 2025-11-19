@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FaShoppingCart } from "react-icons/fa";
 
 function Navbar() {
-  // Count of UNIQUE items
   const uniqueCount = useSelector((s) => Object.keys(s.cart.items).length);
 
   return (
@@ -12,12 +12,14 @@ function Navbar() {
         MiniShop
       </Link>
 
-      <Link to="/cart" className="relative flex items-center gap-2">
-        Cart
+      <Link to="/cart" className="relative">
+        <FaShoppingCart size={26} className="text-gray-700 hover:text-black transition" />
 
-        {/* Show red badge ONLY if > 0 */}
+        {/* Red circular bubble */}
         {uniqueCount > 0 && (
-          <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+          <span
+            className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow"
+          >
             {uniqueCount}
           </span>
         )}

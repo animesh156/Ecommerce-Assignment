@@ -4,6 +4,7 @@ import { clearCart } from "../store/slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../utils/formatPrice";
 import { FaCheckCircle } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export default function Checkout() {
   const items = Object.values(useSelector((s) => s.cart.items));
@@ -20,7 +21,7 @@ export default function Checkout() {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
 
-  // ------------------ FORM VALIDATION ------------------
+  // FORM VALIDATION
   const validate = () => {
     const e = {};
 
@@ -32,15 +33,19 @@ export default function Checkout() {
     return Object.keys(e).length === 0;
   };
 
-  // ------------------ PLACE ORDER ------------------
+  // PLACE ORDER
   const submit = () => {
-    if (!validate()) return;
+    if (!validate()) {
+      toast.error("Please fill all fields correctly");
+      return;
+    }
 
+    toast.success("Order Placed!");
     dispatch(clearCart());
     setSuccess(true);
   };
 
-  // ------------------ SUCCESS MESSAGE ------------------
+  // SUCCESS MESSAGE UI
   if (success)
     return (
       <div className="p-10 bg-white shadow rounded-xl text-center max-w-xl mx-auto mt-10">
@@ -76,24 +81,20 @@ export default function Checkout() {
             placeholder="John Doe"
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
-          {errors.name && (
-            <p className="text-red-600 text-sm mt-1">{errors.name}</p>
-          )}
+          {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
         </div>
 
         {/* Email */}
         <div className="mb-4">
           <label className="text-sm text-gray-600">Email</label>
           <input
-            className={`border  p-3 w-full rounded-lg mt-1 ${
+            className={`border p-3 w-full rounded-lg mt-1 ${
               errors.email ? "border-red-500" : ""
             }`}
             placeholder="john@example.com"
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
-          {errors.email && (
-            <p className="text-red-600 text-sm mt-1">{errors.email}</p>
-          )}
+          {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
         </div>
 
         {/* Address */}
@@ -106,9 +107,7 @@ export default function Checkout() {
             placeholder="123 Main Street, City"
             onChange={(e) => setForm({ ...form, address: e.target.value })}
           />
-          {errors.address && (
-            <p className="text-red-600 text-sm mt-1">{errors.address}</p>
-          )}
+          {errors.address && <p className="text-red-600 text-sm mt-1">{errors.address}</p>}
         </div>
 
         <button

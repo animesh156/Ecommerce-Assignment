@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { getProducts, getCategories } from "../api/products";
 import ProductCard from "../components/ProductCard";
 import { FaSearch } from "react-icons/fa";
+import SkeletonGrid from "../components/SkeletonGrid";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
@@ -27,7 +28,7 @@ export default function Home() {
         setCategories(cats);
         setProducts(prods);
       } catch (err) {
-        setError("Failed to load products.");
+        toast.error("Failed to load products.");
       } finally {
         setLoading(false);
       }
@@ -74,26 +75,10 @@ export default function Home() {
       </div>
 
       {/* Loading skeleton */}
-      {loading && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="bg-gray-200 h-60 rounded-xl animate-pulse"
-            ></div>
-          ))}
-        </div>
-      )}
-
-      {/* Error */}
-      {error && (
-        <p className="text-center text-red-600 bg-red-100 p-3 rounded-lg">
-          {error}
-        </p>
-      )}
+      {loading && <SkeletonGrid />}
 
       {/* Product Grid */}
-      {!loading && !error && (
+      {!loading && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {filteredProducts.map((p) => (
             <ProductCard key={p.id} p={p} />

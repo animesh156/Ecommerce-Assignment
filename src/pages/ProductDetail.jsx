@@ -3,7 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProduct } from "../api/products";
 import { addItem } from "../store/slices/cartSlice";
 import { useDispatch } from "react-redux";
+import Loader from "../components/Loader";
 import { FaStar, FaStarHalfAlt, FaRegStar, FaCartPlus } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -18,12 +20,11 @@ export default function ProductDetail() {
 
   if (!p)
     return (
-      <div className="text-center py-20">
-        <p className="text-gray-600 text-lg">Loading product...</p>
-      </div>
+     <Loader />
     );
 
   const add = () => {
+    toast.success("Item added to cart")
     dispatch(addItem({ product: p, qty }));
     nav("/cart");
   };

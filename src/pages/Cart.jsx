@@ -4,12 +4,19 @@ import { updateQty, removeItem } from "../store/slices/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { formatPrice } from "../utils/formatPrice";
 import { FaTrash } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   const items = Object.values(useSelector((s) => s.cart.items));
   const total = useSelector((s) => s.cart.totalPrice);
   const dispatch = useDispatch();
   const nav = useNavigate();
+
+  // --- HANDLE REMOVE ITEM ---
+  const handleRemove = (id) => {
+    dispatch(removeItem(id));
+    toast.success("Item removed from cart");
+  };
 
   if (items.length === 0)
     return (
@@ -52,7 +59,9 @@ export default function Cart() {
                   <select
                     value={qty}
                     onChange={(e) =>
-                      dispatch(updateQty({ id: product.id, qty: +e.target.value }))
+                      dispatch(
+                        updateQty({ id: product.id, qty: +e.target.value })
+                      )
                     }
                     className="border p-2 rounded-lg text-sm cursor-pointer hover:border-gray-500"
                   >
@@ -63,7 +72,7 @@ export default function Cart() {
 
                   {/* REMOVE BUTTON */}
                   <button
-                    onClick={() => dispatch(removeItem(product.id))}
+                    onClick={() => handleRemove(product.id)}
                     className="flex items-center gap-1 text-red-600 cursor-pointer hover:text-red-800 ml-4 transition"
                   >
                     <FaTrash size={14} />

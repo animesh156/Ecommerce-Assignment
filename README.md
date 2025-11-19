@@ -27,7 +27,7 @@ A functional, fully responsive mini e-commerce web application built using **Rea
 ### **Clone using Git**
 ```bash
 git clone https://github.com/animesh156/Ecommerce-Assignment.git
-cd minishop
+cd Ecommerce-Assignment
 ```
 
 ### **Install dependencies**

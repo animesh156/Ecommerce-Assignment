@@ -10,7 +10,7 @@ function App() {
     <>
       <Navbar />
 
-      <main className="container max-auto p-6">
+      <main className="container mx-auto p-6">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />

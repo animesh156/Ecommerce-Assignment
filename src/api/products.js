@@ -67,13 +67,4 @@ export const getCategories = async () => {
   }
 };
 
-// GET PRODUCTS BY CATEGORY
-export const getProductsByCategory = async (cat) => {
-  try {
-    const products = await getProducts();
-    return products.filter((p) => p.category === cat);
-  } catch (err) {
-    console.error("Failed to filter products by category:", err);
-    throw err;
-  }
-};
+

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getProducts, getCategories } from "../api/products";
 import ProductCard from "../components/ProductCard";
+import { FaSearch } from "react-icons/fa";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -27,7 +28,6 @@ export default function Home() {
         setProducts(prods);
       } catch (err) {
         setError("Failed to load products.");
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -36,30 +36,31 @@ export default function Home() {
     loadData();
   }, []);
 
-  // Filter by search + category
+  // Filter results
   const filteredProducts = products.filter((p) => {
-    const matchesSearch = p.title.toLowerCase().includes(query.toLowerCase());
-    const matchesCategory =
-      category === "all" ? true : p.category === category;
-
-    return matchesSearch && matchesCategory;
+    const matchSearch = p.title.toLowerCase().includes(query.toLowerCase());
+    const matchCategory = category === "all" || p.category === category;
+    return matchSearch && matchCategory;
   });
 
   return (
-    <div>
-      {/* Search + Category */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        {/* Search */}
-        <input
-          className="border p-2 rounded w-full"
-          placeholder="Search by title..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+    <div className="space-y-8">
+      {/* Search + Category dropdown */}
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Search Bar */}
+        <div className="relative w-full">
+          <FaSearch className="absolute left-3 top-4 text-gray-500" size={16} />
+          <input
+            className="border w-full rounded-lg p-3 pl-10 shadow-sm focus:border-2 transition"
+            placeholder="Search products..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
 
         {/* Category Dropdown */}
         <select
-          className="border p-2 rounded w-full md:w-1/3"
+          className="border rounded-lg p-3 shadow-sm w-full md:w-1/3 cursor-pointer focus:border-2 transition"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
@@ -72,29 +73,38 @@ export default function Home() {
         </select>
       </div>
 
-      {/* Loading */}
-      {loading && <p className="text-center text-gray-600">Loading products...</p>}
+      {/* Loading skeleton */}
+      {loading && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-gray-200 h-60 rounded-xl animate-pulse"
+            ></div>
+          ))}
+        </div>
+      )}
 
       {/* Error */}
       {error && (
-        <p className="text-center text-red-600 bg-red-100 p-2 rounded">
+        <p className="text-center text-red-600 bg-red-100 p-3 rounded-lg">
           {error}
         </p>
       )}
 
       {/* Product Grid */}
       {!loading && !error && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {filteredProducts.map((p) => (
             <ProductCard key={p.id} p={p} />
           ))}
         </div>
       )}
 
-      {/* No products found */}
+      {/* No results */}
       {!loading && filteredProducts.length === 0 && (
-        <p className="text-center mt-4 text-gray-600">
-          No products found. Try a different search or category.
+        <p className="text-center text-gray-500 text-lg">
+          No products found. Try another search or category.
         </p>
       )}
     </div>
